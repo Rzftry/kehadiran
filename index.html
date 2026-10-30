@@ -20,11 +20,11 @@
         .cut-line span { position: relative; top: 8px; background: white; padding: 0 10px; }
 
         /* --- REKA BENTUK FORM --- */
-        .header { text-align: center; margin-bottom: 10px; }
-        .header h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: 0.5px; } /* Header utama bold tebal */
+        .header { text-align: center; margin-bottom: 8px; }
+        .header h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: 0.5px; } 
         .header h3 { margin: 3px 0 0 0; font-size: 11px; font-weight: bold; }
         
-        .info { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; font-weight: bold;}
+        .info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; font-weight: bold;}
         .info div { width: 48%; }
         .info span { border-bottom: 1px solid black; display: inline-block; width: 70%; }
         
@@ -34,6 +34,7 @@
             border: 2px solid black; 
             width: 100%; 
             background-color: white;
+            box-sizing: border-box;
         }
         
         .day-header {
@@ -41,28 +42,31 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 11px; /* Dibesarkan */
+            font-size: 11px;
             padding: 6px 0;
             border: 1px solid black;
+            box-sizing: border-box;
         }
 
         .day-cell { 
             display: flex; 
             flex-direction: column; 
             border: 1px solid black; 
-            min-height: 60px; /* Kotak dibesarkan */
+            min-height: 60px; 
             position: relative;
+            box-sizing: border-box;
         }
         .day-number { 
             background-color: #d9d9d9; 
             text-align: left; 
             font-weight: bold; 
-            font-size: 12px; /* Nombor dibesarkan */
+            font-size: 12px; 
             padding: 3px 5px; 
             border-bottom: 1px solid black; 
+            box-sizing: border-box;
         }
         .stamp-space { flex-grow: 1; } 
-        .empty-cell { background-color: #f9f9f9; border: 1px solid black; }
+        .empty-cell { background-color: #f9f9f9; border: 1px solid black; box-sizing: border-box; }
 
         /* --- HIGHLIGHT WARNA LEBIH GELAP --- */
         .col-monday { background-color: #ffe699; }   /* Isnin - Kuning pekat */
@@ -71,41 +75,56 @@
 
         /* --- SETTING UNTUK PRINT (A4) --- */
         @media print {
-            /* Margin kertas A4 5mm supaya ruang maksimum */
-            @page { size: A4 portrait; margin: 5mm; }
+            @page { 
+                size: A4 portrait; 
+                margin: 0; /* Buang margin browser supaya tak tolak form */
+            }
             
-            /* Paksa warna keluar masa print */
             html, body { 
-                width: 200mm; 
+                width: 210mm; 
+                height: 297mm;
                 margin: 0; 
-                padding: 0; 
+                padding: 5mm 5mm; /* Letak padding pada body sebagai ganti margin */
                 background: white; 
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact; 
+                box-sizing: border-box;
             }
             
             .controls { display: none; }
             .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; }
             
-            /* Kunci setiap form pada ketinggian separuh A4 (~142mm) */
+            /* Tinggi form dikunci pada 138mm. (138 + 138 = 276mm). A4 tinggi 297mm. Cukup lega! */
             .form-wrapper { 
-                height: 142mm; 
+                height: 138mm; 
                 display: flex;
                 flex-direction: column;
                 page-break-inside: avoid;
+                box-sizing: border-box;
+                margin-bottom: 0;
             }
             
-            /* Saiz masa print */
-            .header h2 { font-size: 16px; font-weight: 900; }
-            .header h3 { font-size: 11px; }
-            .info { font-size: 11px; margin-bottom: 8px; }
+            .header h2 { font-size: 15px; font-weight: 900; margin-top: 2mm;}
+            .header h3 { font-size: 10px; }
+            .info { font-size: 10px; margin-bottom: 5px; }
             
-            .grid-container { flex-grow: 1; }
-            .day-header { height: 18px; padding: 0; line-height: 18px; font-size: 10px; }
-            .day-cell { min-height: 0; height: 18.5mm; } /* Saiz kotak masa print */
+            .grid-container { 
+                flex-grow: 1; 
+                display: grid;
+                grid-template-rows: 20px repeat(6, 1fr); /* Paksa 6 baris sama tinggi */
+            }
+            .day-header { height: 20px; padding: 0; line-height: 18px; font-size: 10px; }
+            .day-cell { min-height: 0; height: 100%; } /* Biar grid yang kawal tinggi */
             .day-number { font-size: 11px; padding: 2px 4px; }
             
-            .cut-line { margin: 3mm 0; border-bottom: 1px dashed #000; }
+            /* Garisan potong */
+            .cut-line { 
+                margin: 2mm 0; 
+                padding: 2mm 0;
+                border-bottom: 1px dashed #000; 
+                height: 8mm;
+                box-sizing: border-box;
+            }
             .cut-line span { display: none; } 
         }
     </style>
@@ -117,7 +136,7 @@
         <label>Pilih Bulan: </label>
         <select id="monthSelect"></select>
         <label> Tahun: </label>
-        <input type="number" id="yearInput" value="2025" style="width: 80px;">
+        <input type="number" id="yearInput" style="width: 80px;">
         <button onclick="window.print()">🖨️ Print (2 Form 1 Page)</button>
     </div>
 
@@ -163,12 +182,21 @@
         const months = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
         const daysName = ["ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU", "AHAD"];
 
+        // 1. ISI DROPDOWN BULAN
         months.forEach((m, index) => {
             let opt = document.createElement('option');
             opt.value = index;
             opt.innerHTML = m;
             monthSelect.appendChild(opt);
         });
+
+        // 2. AUTO SET KEPADA BULAN & TAHUN SEMASA
+        const today = new Date();
+        const currentMonth = today.getMonth(); // 0-11
+        const currentYear = today.getFullYear(); // cth: 2026
+
+        monthSelect.value = currentMonth;
+        yearInput.value = currentYear;
 
         function generateCalendar() {
             const month = parseInt(monthSelect.value);
@@ -228,6 +256,8 @@
 
         monthSelect.addEventListener('change', generateCalendar);
         yearInput.addEventListener('input', generateCalendar);
+        
+        // Panggil fungsi untuk paparkan kalendar kali pertama buka
         generateCalendar();
     </script>
 </body>
