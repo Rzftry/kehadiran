@@ -20,11 +20,11 @@
         .cut-line span { position: relative; top: 8px; background: white; padding: 0 10px; }
 
         /* --- REKA BENTUK FORM --- */
-        .header { text-align: center; margin-bottom: 10px; }
-        .header h2 { margin: 0; font-size: 15px; }
-        .header h3 { margin: 3px 0 0 0; font-size: 11px; font-weight: normal; }
+        .header { text-align: center; margin-bottom: 8px; }
+        .header h2 { margin: 0; font-size: 14px; }
+        .header h3 { margin: 2px 0 0 0; font-size: 10px; font-weight: normal; }
         
-        .info { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 10px; font-weight: bold;}
+        .info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 10px; font-weight: bold;}
         .info div { width: 48%; }
         .info span { border-bottom: 1px solid black; display: inline-block; width: 70%; }
         
@@ -41,8 +41,8 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 10px;
-            padding: 5px 0;
+            font-size: 9px;
+            padding: 4px 0;
             border: 1px solid black;
         }
 
@@ -50,14 +50,14 @@
             display: flex; 
             flex-direction: column; 
             border: 1px solid black; 
-            min-height: 55px; /* Dikecilkan untuk paparan skrin */
+            min-height: 50px; 
             position: relative;
         }
         .day-number { 
             background-color: #d9d9d9; 
             text-align: left; 
             font-weight: bold; 
-            font-size: 10px; 
+            font-size: 9px; 
             padding: 2px 4px; 
             border-bottom: 1px solid black; 
         }
@@ -69,37 +69,45 @@
         .col-saturday { background-color: #e6f2ff; }
         .col-sunday { background-color: #ffe6e6; }
 
-        /* --- SETTING UNTUK PRINT (A4) --- */
+        /* --- SETTING UNTUK PRINT (A4) - DIPERBETULKAN --- */
         @media print {
-            body { margin: 0; padding: 0; background: white; }
-            .controls { display: none; }
-            .page-container { box-shadow: none; padding: 0; max-width: 100%; margin: 0; }
+            /* Set margin kertas A4 kepada 5mm supaya ruang luas */
+            @page { size: A4 portrait; margin: 5mm; }
             
-            @page { 
-                size: A4 portrait; 
-                margin: 10mm; /* Margin kertas 1cm */
+            /* Paksa warna keluar masa print */
+            html, body { 
+                width: 200mm; /* 210mm - 10mm margin */
+                margin: 0; 
+                padding: 0; 
+                background: white; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
             }
-
-            /* Kunci ketinggian supaya 2 form muat dalam 1 page A4 */
+            
+            .controls { display: none; }
+            .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; }
+            
+            /* Kunci setiap form pada ketinggian ~135mm (Separuh A4) */
             .form-wrapper { 
-                height: 132mm; /* A4 tinggi 297mm, bahagi 2 lebih kurang 135mm */
-                page-break-inside: avoid;
+                height: 135mm; 
                 display: flex;
                 flex-direction: column;
+                page-break-inside: avoid;
             }
             
-            .cut-line { margin: 3mm 0; }
-            
             /* Kecilkan sikit elemen masa print */
-            .header h2 { font-size: 14px; }
-            .header h3 { font-size: 10px; }
+            .header h2 { font-size: 13px; }
+            .header h3 { font-size: 9px; }
             .info { font-size: 9px; margin-bottom: 5px; }
-            .day-header { font-size: 9px; padding: 3px 0; }
-            .day-number { font-size: 9px; padding: 1px 3px; }
             
-            /* Pastikan grid mengisi ruang baki */
+            /* Kunci saiz grid dan kotak */
             .grid-container { flex-grow: 1; }
-            .day-cell { min-height: auto; } /* Biar ia auto mengisi tinggi baki */
+            .day-header { height: 15px; padding: 0; line-height: 15px; font-size: 8px; }
+            .day-cell { min-height: 0; height: 18mm; } /* 18mm x 6 baris = 108mm */
+            .day-number { font-size: 8px; padding: 1px 3px; }
+            
+            .cut-line { margin: 2mm 0; border-bottom: 1px dashed #000; }
+            .cut-line span { display: none; } /* Sembunyi emoji gunting masa print, biar garisan je */
         }
     </style>
 </head>
@@ -156,7 +164,6 @@
         const months = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
         const daysName = ["ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU", "AHAD"];
 
-        // Isi dropdown bulan
         months.forEach((m, index) => {
             let opt = document.createElement('option');
             opt.value = index;
@@ -168,7 +175,6 @@
             const month = parseInt(monthSelect.value);
             const year = parseInt(yearInput.value);
             
-            // Update text bulan di kedua-dua form
             displayMonthYears.forEach(el => {
                 el.innerText = months[month] + " " + year;
             });
@@ -177,11 +183,9 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             let startOffset = (firstDay + 6) % 7; 
 
-            // Loop untuk isi kedua-dua grid (Form 1 & Form 2)
             grids.forEach(grid => {
                 grid.innerHTML = ""; 
 
-                // 1. Header Hari
                 daysName.forEach(day => {
                     let header = document.createElement('div');
                     header.className = 'day-header';
@@ -189,14 +193,12 @@
                     grid.appendChild(header);
                 });
 
-                // 2. Kotak Kosong Awal
                 for (let i = 0; i < startOffset; i++) {
                     let empty = document.createElement('div');
                     empty.className = 'empty-cell';
                     grid.appendChild(empty);
                 }
 
-                // 3. Kotak Tarikh
                 for (let day = 1; day <= daysInMonth; day++) {
                     let cell = document.createElement('div');
                     cell.className = 'day-cell';
@@ -215,7 +217,6 @@
                     grid.appendChild(cell);
                 }
                 
-                // 4. Kotak Kosong Akhir
                 let totalCells = startOffset + daysInMonth;
                 let remainingCells = (7 - (totalCells % 7)) % 7;
                 for (let i = 0; i < remainingCells; i++) {
@@ -228,7 +229,6 @@
 
         monthSelect.addEventListener('change', generateCalendar);
         yearInput.addEventListener('input', generateCalendar);
-
         generateCalendar();
     </script>
 </body>
