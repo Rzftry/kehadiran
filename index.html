@@ -19,13 +19,30 @@
         .cut-line span { position: relative; top: 8px; background: white; padding: 0 10px; }
 
         /* --- REKA BENTUK FORM --- */
-        .header { text-align: center; margin-bottom: 8px; }
+        .header { text-align: center; margin-bottom: 10px; }
         .header h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: 0.5px; } 
         .header h3 { margin: 3px 0 0 0; font-size: 11px; font-weight: bold; }
         
-        .info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; font-weight: bold;}
-        .info div { width: 48%; }
-        .info span { border-bottom: 1px solid black; display: inline-block; width: 70%; }
+        /* --- GARISAN STANDARDIZE (GRID SYSTEM) --- */
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: 50px 1fr 50px 1fr; /* Lebar Kolum: Label - Garisan - Label - Garisan */
+            gap: 8px 10px; 
+            margin-bottom: 10px; 
+            font-size: 11px; 
+            font-weight: bold;
+            align-items: end;
+        }
+        .info-grid .label { white-space: nowrap; }
+        .info-grid .line {
+            border-bottom: 1px solid black;
+            height: 16px;
+            display: flex;
+            align-items: flex-end;
+            padding-left: 5px;
+            font-weight: normal;
+        }
+        .info-grid .line.highlight { font-weight: bold; color: #000; }
         
         .grid-container { 
             display: grid; 
@@ -72,56 +89,56 @@
         .col-saturday { background-color: #b3d9ff; } /* Sabtu - Biru pekat */
         .col-sunday { background-color: #ffb3b3; }   /* Ahad - Merah/Pink pekat */
 
-        /* --- SETTING UNTUK PRINT (A4) --- */
+        /* --- SETTING UNTUK PRINT (A4) - DIPERBETULKAN --- */
         @media print {
             @page { 
                 size: A4 portrait; 
-                margin: 5mm; /* Margin 5mm untuk printer */
+                margin: 0; /* Buang margin browser sepenuhnya */
             }
             
             html, body { 
-                width: 200mm; /* 210mm - 10mm margin */
+                width: 210mm; 
+                height: 297mm;
                 margin: 0; 
-                padding: 0; 
+                padding: 5mm; /* Kita letak margin 5mm pada body */
                 background: white; 
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact; 
+                box-sizing: border-box;
             }
             
             .controls { display: none; }
             .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; max-width: 100%; }
             
-            /* Kunci tinggi setiap form kepada 138mm supaya 2 form muat */
+            /* Kunci tinggi setiap form kepada 132mm. (132*2 = 264mm). Baki 33mm untuk margin & garisan. */
             .form-wrapper { 
-                height: 138mm; 
+                height: 132mm; 
                 display: flex;
                 flex-direction: column;
                 page-break-inside: avoid;
                 margin-bottom: 0;
             }
             
-            /* Saiz Tetap Masa Print */
-            .header { height: 14mm; margin: 0; }
-            .header h2 { font-size: 16px; }
-            .header h3 { font-size: 11px; }
-            .info { height: 12mm; margin: 0; }
+            /* Kunci tinggi header & info supaya tak makan ruang */
+            .header { height: 15mm; margin: 0; }
+            .info-grid { height: 15mm; margin: 0; }
             
-            /* Grid dikunci supaya kotak besar memenuhi ruang */
             .grid-container { 
                 flex-grow: 1; 
                 display: grid;
                 grid-template-columns: repeat(7, 1fr);
-                grid-template-rows: 25px; /* Kunci tinggi header hari kepada 25px */
-                grid-auto-rows: 1fr; /* Baki baris tarikh akan membahagi ruang sama besar */
+                grid-template-rows: 25px; /* Header hari */
+                grid-auto-rows: 1fr; /* Kotak tarikh auto bahagi sama besar */
             }
             .day-header { height: 25px; padding: 0; line-height: 24px; font-size: 11px; }
-            .day-cell { min-height: 0; height: 100%; } /* Memenuhi grid-auto-rows */
+            .day-cell { min-height: 0; height: 100%; } 
             .day-number { font-size: 12px; padding: 3px 5px; }
             
+            /* Garisan potong */
             .cut-line { 
-                margin: 3mm 0; 
+                margin: 2mm 0; 
                 padding: 0;
-                height: 6mm;
+                height: 8mm;
                 border-bottom: 1px dashed #000; 
             }
             .cut-line span { display: none; } 
@@ -147,9 +164,16 @@
                 <h2>PARKSON IOI CITY MALL</h2>
                 <h3>MONTHLY BRIEFING ATTENDANCE AND GROOMING CHECKLIST</h3>
             </div>
-            <div class="info">
-                <div>NAME: <span></span><br><br>Month/YEAR: <span class="displayMonthYear"></span></div>
-                <div>DEPT: <span></span><br><br>BRAND: <span></span></div>
+            <div class="info-grid">
+                <div class="label">NAME:</div>
+                <div class="line"></div>
+                <div class="label">DEPT:</div>
+                <div class="line"></div>
+                
+                <div class="label">MONTH/YEAR:</div>
+                <div class="line highlight"><span class="displayMonthYear"></span></div>
+                <div class="label">BRAND:</div>
+                <div class="line"></div>
             </div>
             <div class="grid-container" id="grid1"></div>
         </div>
@@ -163,9 +187,16 @@
                 <h2>PARKSON IOI CITY MALL</h2>
                 <h3>MONTHLY BRIEFING ATTENDANCE AND GROOMING CHECKLIST</h3>
             </div>
-            <div class="info">
-                <div>NAME: <span></span><br><br>Month/YEAR: <span class="displayMonthYear"></span></div>
-                <div>DEPT: <span></span><br><br>BRAND: <span></span></div>
+            <div class="info-grid">
+                <div class="label">NAME:</div>
+                <div class="line"></div>
+                <div class="label">DEPT:</div>
+                <div class="line"></div>
+                
+                <div class="label">MONTH/YEAR:</div>
+                <div class="line highlight"><span class="displayMonthYear"></span></div>
+                <div class="label">BRAND:</div>
+                <div class="line"></div>
             </div>
             <div class="grid-container" id="grid2"></div>
         </div>
