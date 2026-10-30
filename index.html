@@ -23,24 +23,30 @@
         .header h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: 0.5px; } 
         .header h3 { margin: 3px 0 0 0; font-size: 11px; font-weight: bold; }
         
-        /* --- GARISAN STANDARDIZE (GRID SYSTEM) --- */
+        /* --- GARISAN STANDARDIZE (GRID SYSTEM DIPERBETULKAN) --- */
         .info-grid { 
             display: grid; 
-            grid-template-columns: 50px 1fr 50px 1fr; /* Lebar Kolum: Label - Garisan - Label - Garisan */
-            gap: 8px 10px; 
-            margin-bottom: 10px; 
+            /* Auto untuk label, 1fr untuk garisan jawapan */
+            grid-template-columns: auto 1fr auto 1fr; 
+            gap: 10px 15px; 
+            margin-bottom: 12px; 
             font-size: 11px; 
             font-weight: bold;
-            align-items: end;
+            align-items: center; /* Pastikan label dan garisan lurus tengah */
         }
-        .info-grid .label { white-space: nowrap; }
+        .info-grid .label { 
+            white-space: nowrap; 
+            padding-right: 5px;
+        }
         .info-grid .line {
             border-bottom: 1px solid black;
             height: 16px;
             display: flex;
-            align-items: flex-end;
+            align-items: flex-end; /* Teks bulan duduk elok di atas garisan */
             padding-left: 5px;
             font-weight: normal;
+            overflow: hidden; /* Elak teks terkeluar garisan */
+            white-space: nowrap;
         }
         .info-grid .line.highlight { font-weight: bold; color: #000; }
         
@@ -89,18 +95,18 @@
         .col-saturday { background-color: #b3d9ff; } /* Sabtu - Biru pekat */
         .col-sunday { background-color: #ffb3b3; }   /* Ahad - Merah/Pink pekat */
 
-        /* --- SETTING UNTUK PRINT (A4) - DIPERBETULKAN --- */
+        /* --- SETTING UNTUK PRINT (A4) --- */
         @media print {
             @page { 
                 size: A4 portrait; 
-                margin: 0; /* Buang margin browser sepenuhnya */
+                margin: 0; 
             }
             
             html, body { 
                 width: 210mm; 
                 height: 297mm;
                 margin: 0; 
-                padding: 5mm; /* Kita letak margin 5mm pada body */
+                padding: 5mm; 
                 background: white; 
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact; 
@@ -110,7 +116,6 @@
             .controls { display: none; }
             .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; max-width: 100%; }
             
-            /* Kunci tinggi setiap form kepada 132mm. (132*2 = 264mm). Baki 33mm untuk margin & garisan. */
             .form-wrapper { 
                 height: 132mm; 
                 display: flex;
@@ -119,7 +124,6 @@
                 margin-bottom: 0;
             }
             
-            /* Kunci tinggi header & info supaya tak makan ruang */
             .header { height: 15mm; margin: 0; }
             .info-grid { height: 15mm; margin: 0; }
             
@@ -127,14 +131,13 @@
                 flex-grow: 1; 
                 display: grid;
                 grid-template-columns: repeat(7, 1fr);
-                grid-template-rows: 25px; /* Header hari */
-                grid-auto-rows: 1fr; /* Kotak tarikh auto bahagi sama besar */
+                grid-template-rows: 25px; 
+                grid-auto-rows: 1fr; 
             }
             .day-header { height: 25px; padding: 0; line-height: 24px; font-size: 11px; }
             .day-cell { min-height: 0; height: 100%; } 
             .day-number { font-size: 12px; padding: 3px 5px; }
             
-            /* Garisan potong */
             .cut-line { 
                 margin: 2mm 0; 
                 padding: 0;
