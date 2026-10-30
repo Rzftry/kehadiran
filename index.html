@@ -20,11 +20,11 @@
         .cut-line span { position: relative; top: 8px; background: white; padding: 0 10px; }
 
         /* --- REKA BENTUK FORM --- */
-        .header { text-align: center; margin-bottom: 8px; }
-        .header h2 { margin: 0; font-size: 14px; }
-        .header h3 { margin: 2px 0 0 0; font-size: 10px; font-weight: normal; }
+        .header { text-align: center; margin-bottom: 10px; }
+        .header h2 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: 0.5px; } /* Header utama bold tebal */
+        .header h3 { margin: 3px 0 0 0; font-size: 11px; font-weight: bold; }
         
-        .info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 10px; font-weight: bold;}
+        .info { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; font-weight: bold;}
         .info div { width: 48%; }
         .info span { border-bottom: 1px solid black; display: inline-block; width: 70%; }
         
@@ -41,8 +41,8 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 9px;
-            padding: 4px 0;
+            font-size: 11px; /* Dibesarkan */
+            padding: 6px 0;
             border: 1px solid black;
         }
 
@@ -50,33 +50,33 @@
             display: flex; 
             flex-direction: column; 
             border: 1px solid black; 
-            min-height: 50px; 
+            min-height: 60px; /* Kotak dibesarkan */
             position: relative;
         }
         .day-number { 
             background-color: #d9d9d9; 
             text-align: left; 
             font-weight: bold; 
-            font-size: 9px; 
-            padding: 2px 4px; 
+            font-size: 12px; /* Nombor dibesarkan */
+            padding: 3px 5px; 
             border-bottom: 1px solid black; 
         }
         .stamp-space { flex-grow: 1; } 
         .empty-cell { background-color: #f9f9f9; border: 1px solid black; }
 
-        /* Highlight Kolum */
-        .col-monday { background-color: #fff9e6; }
-        .col-saturday { background-color: #e6f2ff; }
-        .col-sunday { background-color: #ffe6e6; }
+        /* --- HIGHLIGHT WARNA LEBIH GELAP --- */
+        .col-monday { background-color: #ffe699; }   /* Isnin - Kuning pekat */
+        .col-saturday { background-color: #b3d9ff; } /* Sabtu - Biru pekat */
+        .col-sunday { background-color: #ffb3b3; }   /* Ahad - Merah/Pink pekat */
 
-        /* --- SETTING UNTUK PRINT (A4) - DIPERBETULKAN --- */
+        /* --- SETTING UNTUK PRINT (A4) --- */
         @media print {
-            /* Set margin kertas A4 kepada 5mm supaya ruang luas */
+            /* Margin kertas A4 5mm supaya ruang maksimum */
             @page { size: A4 portrait; margin: 5mm; }
             
             /* Paksa warna keluar masa print */
             html, body { 
-                width: 200mm; /* 210mm - 10mm margin */
+                width: 200mm; 
                 margin: 0; 
                 padding: 0; 
                 background: white; 
@@ -87,27 +87,26 @@
             .controls { display: none; }
             .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; }
             
-            /* Kunci setiap form pada ketinggian ~135mm (Separuh A4) */
+            /* Kunci setiap form pada ketinggian separuh A4 (~142mm) */
             .form-wrapper { 
-                height: 135mm; 
+                height: 142mm; 
                 display: flex;
                 flex-direction: column;
                 page-break-inside: avoid;
             }
             
-            /* Kecilkan sikit elemen masa print */
-            .header h2 { font-size: 13px; }
-            .header h3 { font-size: 9px; }
-            .info { font-size: 9px; margin-bottom: 5px; }
+            /* Saiz masa print */
+            .header h2 { font-size: 16px; font-weight: 900; }
+            .header h3 { font-size: 11px; }
+            .info { font-size: 11px; margin-bottom: 8px; }
             
-            /* Kunci saiz grid dan kotak */
             .grid-container { flex-grow: 1; }
-            .day-header { height: 15px; padding: 0; line-height: 15px; font-size: 8px; }
-            .day-cell { min-height: 0; height: 18mm; } /* 18mm x 6 baris = 108mm */
-            .day-number { font-size: 8px; padding: 1px 3px; }
+            .day-header { height: 18px; padding: 0; line-height: 18px; font-size: 10px; }
+            .day-cell { min-height: 0; height: 18.5mm; } /* Saiz kotak masa print */
+            .day-number { font-size: 11px; padding: 2px 4px; }
             
-            .cut-line { margin: 2mm 0; border-bottom: 1px dashed #000; }
-            .cut-line span { display: none; } /* Sembunyi emoji gunting masa print, biar garisan je */
+            .cut-line { margin: 3mm 0; border-bottom: 1px dashed #000; }
+            .cut-line span { display: none; } 
         }
     </style>
 </head>
