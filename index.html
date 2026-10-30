@@ -12,7 +12,6 @@
         .controls select, .controls input { padding: 5px; margin-right: 15px; font-size: 14px;}
         .controls button { padding: 6px 15px; font-weight: bold; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 3px;}
         
-        /* Kotak pembalut untuk paparan skrin */
         .page-container { max-width: 210mm; margin: 0 auto; background: white; padding: 10mm; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
         
         .form-wrapper { margin-bottom: 10mm; }
@@ -68,7 +67,7 @@
         .stamp-space { flex-grow: 1; } 
         .empty-cell { background-color: #f9f9f9; border: 1px solid black; box-sizing: border-box; }
 
-        /* --- HIGHLIGHT WARNA LEBIH GELAP --- */
+        /* Highlight Warna */
         .col-monday { background-color: #ffe699; }   /* Isnin - Kuning pekat */
         .col-saturday { background-color: #b3d9ff; } /* Sabtu - Biru pekat */
         .col-sunday { background-color: #ffb3b3; }   /* Ahad - Merah/Pink pekat */
@@ -77,53 +76,53 @@
         @media print {
             @page { 
                 size: A4 portrait; 
-                margin: 0; /* Buang margin browser supaya tak tolak form */
+                margin: 5mm; /* Margin 5mm untuk printer */
             }
             
             html, body { 
-                width: 210mm; 
-                height: 297mm;
+                width: 200mm; /* 210mm - 10mm margin */
                 margin: 0; 
-                padding: 5mm 5mm; /* Letak padding pada body sebagai ganti margin */
+                padding: 0; 
                 background: white; 
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact; 
-                box-sizing: border-box;
             }
             
             .controls { display: none; }
-            .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; }
+            .page-container { padding: 0; margin: 0; box-shadow: none; width: 100%; max-width: 100%; }
             
-            /* Tinggi form dikunci pada 138mm. (138 + 138 = 276mm). A4 tinggi 297mm. Cukup lega! */
+            /* Kunci tinggi setiap form kepada 138mm supaya 2 form muat */
             .form-wrapper { 
                 height: 138mm; 
                 display: flex;
                 flex-direction: column;
                 page-break-inside: avoid;
-                box-sizing: border-box;
                 margin-bottom: 0;
             }
             
-            .header h2 { font-size: 15px; font-weight: 900; margin-top: 2mm;}
-            .header h3 { font-size: 10px; }
-            .info { font-size: 10px; margin-bottom: 5px; }
+            /* Saiz Tetap Masa Print */
+            .header { height: 14mm; margin: 0; }
+            .header h2 { font-size: 16px; }
+            .header h3 { font-size: 11px; }
+            .info { height: 12mm; margin: 0; }
             
+            /* Grid dikunci supaya kotak besar memenuhi ruang */
             .grid-container { 
                 flex-grow: 1; 
                 display: grid;
-                grid-template-rows: 20px repeat(6, 1fr); /* Paksa 6 baris sama tinggi */
+                grid-template-columns: repeat(7, 1fr);
+                grid-template-rows: 25px; /* Kunci tinggi header hari kepada 25px */
+                grid-auto-rows: 1fr; /* Baki baris tarikh akan membahagi ruang sama besar */
             }
-            .day-header { height: 20px; padding: 0; line-height: 18px; font-size: 10px; }
-            .day-cell { min-height: 0; height: 100%; } /* Biar grid yang kawal tinggi */
-            .day-number { font-size: 11px; padding: 2px 4px; }
+            .day-header { height: 25px; padding: 0; line-height: 24px; font-size: 11px; }
+            .day-cell { min-height: 0; height: 100%; } /* Memenuhi grid-auto-rows */
+            .day-number { font-size: 12px; padding: 3px 5px; }
             
-            /* Garisan potong */
             .cut-line { 
-                margin: 2mm 0; 
-                padding: 2mm 0;
+                margin: 3mm 0; 
+                padding: 0;
+                height: 6mm;
                 border-bottom: 1px dashed #000; 
-                height: 8mm;
-                box-sizing: border-box;
             }
             .cut-line span { display: none; } 
         }
@@ -182,7 +181,6 @@
         const months = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
         const daysName = ["ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU", "AHAD"];
 
-        // 1. ISI DROPDOWN BULAN
         months.forEach((m, index) => {
             let opt = document.createElement('option');
             opt.value = index;
@@ -190,13 +188,10 @@
             monthSelect.appendChild(opt);
         });
 
-        // 2. AUTO SET KEPADA BULAN & TAHUN SEMASA
+        // AUTO SET BULAN & TAHUN SEMASA
         const today = new Date();
-        const currentMonth = today.getMonth(); // 0-11
-        const currentYear = today.getFullYear(); // cth: 2026
-
-        monthSelect.value = currentMonth;
-        yearInput.value = currentYear;
+        monthSelect.value = today.getMonth();
+        yearInput.value = today.getFullYear();
 
         function generateCalendar() {
             const month = parseInt(monthSelect.value);
@@ -256,8 +251,6 @@
 
         monthSelect.addEventListener('change', generateCalendar);
         yearInput.addEventListener('input', generateCalendar);
-        
-        // Panggil fungsi untuk paparkan kalendar kali pertama buka
         generateCalendar();
     </script>
 </body>
